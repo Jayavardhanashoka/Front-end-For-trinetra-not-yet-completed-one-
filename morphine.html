@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRINETRA AI Security - Input Scanner</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --bg-body: #F9FAFB;
+            --bg-card: #FFFFFF;
+            --color-primary: #4F46E5;
+            --color-text-main: #111827;
+            --color-text-muted: #6B7280;
+            --shadow-lifted: 0 20px 40px -10px rgba(79, 70, 229, 0.15);
+            --radius-lg: 24px;
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--color-text-main);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            /* Prevent horizontal scroll from animations */
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition-smooth);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Staggered Entry Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-smooth);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        .nav {
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(249, 250, 251, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo i {
+            color: var(--color-primary);
+            font-size: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+        }
+
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        /* Scanner Layout */
+        .scanner-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .scanner-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            /* Softer base shadow */
+            width: 100%;
+            transition: var(--transition-smooth);
+        }
+
+        .scanner-card:hover {
+            box-shadow: var(--shadow-lifted);
+            /* Deep lifted shadow on hover */
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 32px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 32px;
+            width: 100%;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 24px;
+            background-color: #F3F4F6;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            font-family: 'Manrope', monospace;
+            /* Monospace for code/input feel */
+            font-size: 1rem;
+            color: var(--color-text-main);
+            resize: none;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        textarea:focus {
+            background-color: #FFFFFF;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #9CA3AF;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 180px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Success Card - Hidden Initially */
+        .success-card {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            /* Bouncy enter */
+            z-index: 500;
+            border: 1px solid #ECFDF5;
+        }
+
+        .success-card.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .check-circle {
+            width: 40px;
+            height: 40px;
+            background: #D1FAE5;
+            color: #059669;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        /* Loading Spinner Animation */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Upload Button in Textarea */
+        .input-group {
+            position: relative;
+            margin-bottom: 32px;
+            width: 100%;
+        }
+
+        .input-action-btn {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #E5E7EB;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: var(--transition-smooth);
+            z-index: 10;
+        }
+
+        .input-action-btn:hover {
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+            background: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Adjust textarea padding so text doesnt go under button */
+        textarea {
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="nav reveal">
+            <div class="nav-logo">
+                <i class="ph-fill ph-shield-check"></i>
+                TRINETRA
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="morphine.html" class="nav-link active">Input Scanner</a>
+                <a href="venom.html" class="nav-link">Network Monitor</a>
+            </div>
+        </nav>
+
+        <div class="scanner-layout">
+            <div class="scanner-card reveal">
+                <h1>Analyze Threat Vector</h1>
+                <div class="input-group">
+                    <textarea id="packetInput"
+                        placeholder="Paste packet data, logs, or suspicious strings here for deep analysis..."></textarea>
+
+                    <button class="input-action-btn" onclick="document.getElementById('fileUpload').click()">
+                        <i class="ph-bold ph-upload-simple"></i>
+                        <span>Upload File</span>
+                    </button>
+                    <input type="file" id="fileUpload" style="display: none;" onchange="handleFileUpload(this)">
+                </div>
+                <button id="runBtn" class="btn-primary" onclick="runAnalysis()">
+                    Run Analysis
+                    <i class="ph-bold ph-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Card -->
+    <div class="success-card" id="successCard">
+        <div class="check-circle">
+            <i class="ph-bold ph-check"></i>
+        </div>
+        <div>
+            <div style="font-weight: 700; color: #065F46;">Analysis Complete</div>
+            <div style="font-size: 0.9rem; color: #6B7280;">No malicious patterns detected.</div>
+        </div>
+    </div>
+
+    <script>
+        // Staggered Entry Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('visible');
+                }, index * 100);
+            });
+        });
+
+        function handleFileUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const textArea = document.getElementById('packetInput');
+                    textArea.value = `[FILE UPLOADED: ${file.name}]\n\n` + e.target.result;
+                }
+
+                // For demo, just reading as text. In real app, might handle differently.
+                reader.readAsText(file);
+            }
+        }
+
+        function runAnalysis() {
+            const btn = document.getElementById('runBtn');
+            const originalContent = btn.innerHTML;
+
+            // 1. Loading State
+            btn.disabled = true;
+            btn.innerHTML = `<i class="ph-bold ph-spinner spinner" style="font-size: 1.25rem;"></i> Processing...`;
+
+            // 2. Simulate Delay
+            setTimeout(() => {
+                // Restore Button
+                btn.innerHTML = `<i class="ph-bold ph-check"></i> Done`;
+                // btn.disabled = false; // Keep disabled to prevent spamming or re-enable if desired
+
+                // 3. Show Success Card
+                const card = document.getElementById('successCard');
+                card.classList.add('active');
+
+                // Optional: Hide card after a few seconds
+                setTimeout(() => {
+                    card.classList.remove('active');
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                }, 4000);
+
+            }, 2000);
+        }
+    </script>
+    <script src="particles.js"></script>
+</body>
+
+</html>

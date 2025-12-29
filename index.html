@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRINETRA | AI Security Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Dynamic Background -->
+    <canvas id="bgCanvas"></canvas>
+    <div class="overlay"></div>
+
+    <!-- Navigation -->
+    <header>
+        <div class="logo">
+            <span class="icon">⟁</span> TRINETRA
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home" class="nav-link active" data-target="home">Home</a></li>
+                <li><a href="#about" class="nav-link" data-target="about">About</a></li>
+                <li><a href="#services" class="nav-link" data-target="services">Services</a></li>
+                <li><a href="#scanner" class="nav-link" data-target="scanner">Scanner</a></li>
+                <li><a href="#logs" class="nav-link" data-target="logs">Logs</a></li>
+                <li><a href="#contact" class="nav-link" data-target="contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <!-- Search Icon or Status indicator -->
+            <div class="status-indicator">
+                <span class="status-dot"></span> SYSTEM ONLINE
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- HOME / LANDING SECTION -->
+        <section id="home" class="active-section">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <h1 class="glitch-text" data-text="GENERATIVE AI FOR BUSINESS">GENERATIVE AI <br> <span class="highlight">FOR BUSINESS</span></h1>
+                    <p class="subtitle">Transforming Operations Through Innovation. Precise. Intelligent. Secure.</p>
+                    <div class="cta-group">
+                        <button class="btn btn-primary" onclick="navigateTo('scanner')">INITIATE SCAN</button>
+                        <button class="btn btn-secondary" onclick="navigateTo('about')">LEARN MORE</button>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <!-- Symbolic AI Brain/Eye Visual -->
+                    <div class="ai-visual-container">
+                        <div class="ai-core">
+                            <div class="ai-ring ring-1"></div>
+                            <div class="ai-ring ring-2"></div>
+                            <div class="ai-ring ring-3"></div>
+                            <div class="ai-text">AI</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-footer">
+                <p>Presented by Trinetra Security Systems</p>
+                <div class="decoration-line"></div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about">
+            <div class="section-content">
+                <h2>What Is <span class="highlight">Trinetra?</span></h2>
+                <div class="glass-card">
+                    <p>Trinetra is the all-seeing digital eye. A next-generation AI platform designed to provide unparalleled visibility into security threats, operational inefficiencies, and data patterns.</p>
+                    <p>Leveraging advanced neural networks, we scan, analyze, and secure your digital infrastructure in real-time.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES SECTION -->
+        <section id="services">
+            <div class="section-content">
+                <h2>Our <span class="highlight">Capabilities</span></h2>
+                <div class="grid-3">
+                    <div class="feature-card">
+                        <div class="icon">🛡️</div>
+                        <h3>Threat Detection</h3>
+                        <p>Real-time analysis of network traffic to identify anomalies.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">👁️</div>
+                        <h3>Predictive Vision</h3>
+                        <p>Forecasting potential vulnerabilities before they are exploited.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon">⚡</div>
+                        <h3>Automated Response</h3>
+                        <p>Instantaneous mitigation protocols powered by AI.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCANNER SECTION -->
+        <section id="scanner">
+            <div class="section-content split-view">
+                <div class="scanner-interface">
+                    <h2><span class="icon">◈</span> SYSTEM SCANNER</h2>
+                    <p class="instruction">Enter data payload or URL for vulnerability assessment.</p>
+                    
+                    <div class="input-area">
+                        <textarea id="scannerInput" placeholder="root@system:~$ Enter command or data stream for analysis..."></textarea>
+                        <div class="actions">
+                            <button id="analyzeBtn" class="btn btn-primary">
+                                <span class="btn-text">RUN DIAGNOSTICS</span>
+                                <span class="btn-loader"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="analysisOutput" class="analysis-output hidden">
+                        <div class="output-header">
+                            <span class="terminal-title">ANALYSIS_RESULT_LOG.txt</span>
+                            <span class="close-output">×</span>
+                        </div>
+                        <div class="output-body">
+                            <div id="typingContainer"></div>
+                            <span class="cursor">_</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scanner-visuals">
+                    <div class="radar-scan">
+                        <div class="scan-line"></div>
+                    </div>
+                    <div class="status-panel">
+                        <div class="stat-row"><span>CPU LOAD</span> <div class="bar"><div class="fill" style="width: 45%"></div></div></div>
+                        <div class="stat-row"><span>MEMORY</span> <div class="bar"><div class="fill" style="width: 62%"></div></div></div>
+                        <div class="stat-row"><span>NETWORK</span> <div class="bar"><div class="fill" style="width: 88%"></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOGS SECTION -->
+        <section id="logs">
+            <div class="section-content">
+                <h2><span class="icon">≣</span> SYSTEM LOGS</h2>
+                
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <h3>TOTAL SCANS</h3>
+                        <div class="number" id="stats-scans">1,248</div>
+                        <div class="trend up">▲ 12% this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>THREATS BLOCKED</h3>
+                        <div class="number" id="stats-blocked">42</div>
+                        <div class="trend down">▼ 3% stability</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>SYSTEM UPTIME</h3>
+                        <div class="number">99.9%</div>
+                        <div class="trend stable">ALL SYSTEMS GREEN</div>
+                    </div>
+                </div>
+
+                <div class="logs-container">
+                    <div class="logs-header">
+                        <span>TIMESTAMP</span>
+                        <span>EVENT TYPE</span>
+                        <span>SEVERITY</span>
+                        <span>DETAILS</span>
+                    </div>
+                    <div class="logs-list" id="logsList">
+                        <!-- Populated by JS -->
+                        <div class="log-entry">
+                            <span class="time">19:20:44</span>
+                            <span class="type">AUTH_ATTEMPT</span>
+                            <span class="severity low">LOW</span>
+                            <span class="details">User login successful [ID: 8821]</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="time">19:18:12</span>
+                            <span class="type">FIREWALL</span>
+                            <span class="severity high">CRITICAL</span>
+                            <span class="details">Inbound packet dropped from 192.168.x.x</span>
+                        </div>
+                        <div class="log-entry">
+                            <span class="time">19:05:30</span>
+                            <span class="type">SYS_CHECK</span>
+                            <span class="severity info">INFO</span>
+                            <span class="details">Routine maintenance scan completed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact">
+            <div class="section-content">
+                <h2>Establish <span class="highlight">Connection</span></h2>
+                <div class="glass-card contact-form">
+                    <input type="text" placeholder="Identity / Name">
+                    <input type="email" placeholder="Communication Channel / Email">
+                    <textarea placeholder="Message Payload"></textarea>
+                    <button class="btn btn-primary">TRANSMIT</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="particles.js"></script> <!-- Optional fallback if we don't write custom canvas code immediately -->
+    <script src="script.js"></script>
+</body>
+</html>
